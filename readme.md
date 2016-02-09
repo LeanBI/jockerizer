@@ -27,3 +27,6 @@ Options :
 --docker-repository', help='docker repository where the image will be stored',default="leanbi/jedox6")
 
 --docker-tag', help='tag used for storing final docker image',default="$jedox_version")
+
+
+[LeanBI](http://leanbi.ch/big-data/)

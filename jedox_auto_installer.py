@@ -111,7 +111,7 @@ class jedox_installer(default_logger):
                 i+=1
             child.expect(pexpect.EOF)
             fout.close()
-            #self.logger.info(open(fout_file).read())
+            self.logger.info(open(fout_file).read())
             self.logger.info("install finished output below")
 
     def start(self):

@@ -22,6 +22,7 @@ class dockerizer(default_logger):
         sleep(15)
         self.installer.stop()
         sleep(15)
+
         self.patch()
         self.add()
         self.build_base_image(self.base_image_name)
@@ -81,8 +82,10 @@ class dockerizer(default_logger):
         for e in exec_list:
             if "description" in e : #print description in logs if available
                 self.logger.info(e["description"])
-            exec_c=self.docker.exec_create(myContainer,e["cmd"])
+            exec_c=self.docker.exec_create(myContainer,e["cmd"],stdout=True,stderr=True)
             output=self.docker.exec_start(exec_c)
+            self.logger.debug(self.docker.exec_inspect(exec_c))
+            self.logger.info(output)
 
         self.logger.debug("all exec done")
 
@@ -105,7 +108,7 @@ if __name__ == '__main__':
     parser.add_argument('--jedox-version', help='Jedox version to be installed ex: 6.0_SR1',default="6.0_SR1")
     parser.add_argument('--base-image', help='name of the docker base image to be created default=jedox/base',default="jedox/base")
     parser.add_argument('--config', help='json config file',default="./config.json")
-    parser.add_argument('--docker-repository', help='docker repository where the image will be stored',default="leanbi/jedox6")
+    parser.add_argument('--docker-repository', help='docker repository where the image will be stored',default="jedox/base")
     parser.add_argument('--docker-tag', help='tag used for storing final docker image',default="$jedox_version")
     args = vars(parser.parse_args())
 
