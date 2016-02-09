@@ -99,7 +99,7 @@ class jedox_installer(default_logger):
                      ]
 
 
-            child = pexpect.spawn(install_script)
+            child = pexpect.spawn(install_script,env=os.environ)
             fout_file="installer_fout.log"
             fout = open(fout_file, "ab")
             child.logfile = fout
