@@ -31,6 +31,8 @@ class jedox_installer(default_logger):
         if args["installer_download"]!=False:
             self.installer=self.download()
             self.uncompress()
+
+        self.sign_eula()
         self.install()
 
     def remove_old_install(self):
@@ -121,6 +123,12 @@ class jedox_installer(default_logger):
     def stop(self):
         subprocess.run(["/opt/jedox/ps/jedox-suite.sh","stop"], shell=False, check=True)
         #Unmounting /opt/jedox/ps/sys...done.
+
+    def sign_eula(self):
+        eula_file=os.path.join(self.installer_directory,self.args["eula"])
+        if not os.path.isfile(eula_file):
+            with open(eula_file, 'a'):
+                os.utime(eula_file, None)
 
 
 

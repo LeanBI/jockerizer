@@ -11,6 +11,7 @@ class dockerizer(default_logger):
         default_logger.__init__(self,"dockerizer")
         self.args=args
         self.config=self.get_config()
+        self.args["eula"]=self.config["installer"]["eula"]
         self.directory=(os.path.dirname(os.path.realpath(__file__)))
 
         self.base_image_name=args["base_image"]
@@ -105,7 +106,7 @@ if __name__ == '__main__':
     parser.add_argument('--installer-download', help='download the installer rather than using a local one',default=False)
     parser.add_argument('--installer-directory',type=str, help='where the install files are or will be uncompressed',default="/opt/jedox_installation")
     parser.add_argument('--jedox-home',type=str, help='directory where jedox is installed default=/opt/jedox/ps',default="/opt/jedox/ps")
-    parser.add_argument('--jedox-version', help='Jedox version to be installed ex: 6.0_SR1',default="6.0_SR1")
+    parser.add_argument('--jedox-version', help='Jedox version to be installed ex: 6.0_SR1',default="6.0_SR2")
     parser.add_argument('--base-image', help='name of the docker base image to be created default=jedox/base',default="jedox/base")
     parser.add_argument('--config', help='json config file',default="./config.json")
     parser.add_argument('--docker-repository', help='docker repository where the image will be stored',default="jedox/base")
