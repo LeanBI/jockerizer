@@ -10,6 +10,11 @@ All was done based on the [work from Zurab Khadikov](https://github.com/zkhadiko
 ##Usage
 python jedox_auto_dockerize [options]
 
+You have 3 different possibility how you can get the installer :
+    - --installer-download  url the installer will be downloaded from
+    - --installer-directory  if the installer is already uncompressed somewhere on the disk
+    - --installer-file in case you have already the installer.tag on the disk, but still compressed
+    
 Options :
 
 --installer-download', help='download the installer rather than using a local one',default=False)

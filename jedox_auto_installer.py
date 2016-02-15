@@ -25,12 +25,26 @@ class jedox_installer(default_logger):
     def __init__(self,args):
         default_logger.__init__(self,"jedox_installer")
         self.args=args
+        uncompress=False
+
         self.download_directory=self.args["installer_directory"]
         self.installer_directory=self.args["installer_directory"] + "/" + self.args["jedox_version"] + "/"
 
         if args["installer_download"]!=False:
+            self.logger.info("Installer : download from url")
             self.installer=self.download()
+            uncompress=True
+        elif args["installer_file"]!=False:
+            self.logger.info("Installer : taking the file specified :%s" % args["installer_file"])
+            self.installer=args["installer_file"]
+            uncompress=True
+
+        if  uncompress==True  :
             self.uncompress()
+
+        if not os.path.isdir(self.installer_directory):
+            self.logger.critical("Installer directory not found --> ABORTING %s" % self.installer_directory)
+            sys.exit(3)
 
         self.sign_eula()
         self.install()
@@ -125,8 +139,10 @@ class jedox_installer(default_logger):
         #Unmounting /opt/jedox/ps/sys...done.
 
     def sign_eula(self):
+
         eula_file=os.path.join(self.installer_directory,self.args["eula"])
         if not os.path.isfile(eula_file):
+            self.logger.info("EULA License was not sign, creating file %s" % eula_file)
             with open(eula_file, 'a'):
                 os.utime(eula_file, None)
 
@@ -137,6 +153,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Build a jedox image for docker')
     parser.add_argument('--installer-download', help='download the installer rather than using a local one',default=False)
     parser.add_argument('--installer-directory',type=str, help='where the install files are or will be uncompressed',default="/opt/jedox_installation")
+    parser.add_argument('--installer-file',type=str, help='where the installer tar file is stored',default=False)
     parser.add_argument('--jedox-version', help='Jedox version to be installed ex: 6.0_SR1',default="6.0_SR2")
     args = vars(parser.parse_args())
 

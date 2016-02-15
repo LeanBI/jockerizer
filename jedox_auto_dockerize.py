@@ -31,6 +31,9 @@ class dockerizer(default_logger):
         self.docker.start(self.base_container)
         self.docker_exec(self.base_container,self.config["docker"]["exec"])
         self.commit(self.args["docker_repository"],self.args["docker_tag"])
+        #remove intermediate container
+        self.logger.info("removing base container")
+        self.docker.remove_container(container=self.base_container,force=True)
 
     def get_config(self):
         try :
@@ -105,6 +108,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Build a jedox image for docker')
     parser.add_argument('--installer-download', help='download the installer rather than using a local one',default=False)
     parser.add_argument('--installer-directory',type=str, help='where the install files are or will be uncompressed',default="/opt/jedox_installation")
+    parser.add_argument('--installer-file',type=str, help='where the installer tar file is stored',default=False)
     parser.add_argument('--jedox-home',type=str, help='directory where jedox is installed default=/opt/jedox/ps',default="/opt/jedox/ps")
     parser.add_argument('--jedox-version', help='Jedox version to be installed ex: 6.0_SR1',default="6.0_SR2")
     parser.add_argument('--base-image', help='name of the docker base image to be created default=jedox/base',default="jedox/base")
