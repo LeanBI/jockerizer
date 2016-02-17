@@ -131,11 +131,11 @@ class jedox_installer(default_logger):
             self.logger.info("install finished output below")
 
     def start(self):
-        subprocess.run(["/opt/jedox/ps/jedox-suite.sh","start"], shell=False, check=True)
+        subprocess.check_call(["/opt/jedox/ps/jedox-suite.sh","start"], shell=False)
         #Starting httpd: [  OK  ]
 
     def stop(self):
-        subprocess.run(["/opt/jedox/ps/jedox-suite.sh","stop"], shell=False, check=True)
+        subprocess.check_call(["/opt/jedox/ps/jedox-suite.sh","stop"], shell=False)
         #Unmounting /opt/jedox/ps/sys...done.
 
     def sign_eula(self):
