@@ -57,7 +57,7 @@ class dockerizer(default_logger):
             description=p.get("description",p["target"])
 
             self.logger.info("patching : %s" % description)
-            subprocess.run("patch %s < %s" % (target,p["source"]),shell=True)
+            subprocess.check_call("patch %s < %s" % (target,p["source"]),shell=True)
 
     def add(self):
         self.logger.info("adding additional content to installation")
@@ -76,7 +76,7 @@ class dockerizer(default_logger):
     def build_base_image(self,image_name="jedox/base"):
         os.chdir(self.args["jedox_home"])
         self.logger.info("Import Jedox Suite into intermediate docker image '%s'" % image_name)
-        subprocess.call("""tar --to-stdout --numeric-owner --exclude=/proc --exclude=/sys --exclude='*.tar.gz' --exclude='*.log' -c ./ | docker import --change "CMD while true; do ping 8.8.8.8; done" --change "ENV TERM=xterm" - %s""" % image_name, shell=True)
+        subprocess.check_call("""tar --to-stdout --numeric-owner --exclude=/proc --exclude=/sys --exclude='*.tar.gz' --exclude='*.log' -c ./ | docker import --change "CMD while true; do ping 8.8.8.8; done" --change "ENV TERM=xterm" - %s""" % image_name, shell=True)
         self.logger.info("successfully create basecontainer %s" % image_name)
 
 
